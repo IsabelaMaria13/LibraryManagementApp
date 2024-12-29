@@ -52,7 +52,7 @@ export default {
           password: this.password,
         });
         localStorage.setItem("token", response.data.token);
-        this.$router.push("/profile");
+        this.$router.push("/books");
       } catch (error) {
         console.error("Login error:", error);
       }

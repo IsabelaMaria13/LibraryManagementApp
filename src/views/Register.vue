@@ -44,18 +44,6 @@
             type="tel"
         ></v-text-field>
 
-        <v-select
-            v-model="agencyId"
-            :items="agencies"
-            item-text="name"
-            item-value="id"
-            label="Library Branch"
-            outlined
-            dense
-            clearable
-            :rules="[rules.required]"
-        ></v-select>
-
         <v-text-field
             v-model="password"
             :rules="[rules.required]"
@@ -82,7 +70,6 @@
 
 <script>
 import axios from "../plugins/axios";
-import { AGENCIES } from "../constants/agencies";
 
 export default {
   data() {
@@ -91,15 +78,12 @@ export default {
       lastName: "",
       email: "",
       phone: "",
-      agencyId: "",
       password: "",
-      agencies: AGENCIES,
       errors: {
         firstName: [],
         lastName: [],
         email: [],
         phone: [],
-        agencyId: [],
         password: [],
       },
       rules: {
@@ -121,7 +105,6 @@ export default {
           lastName: this.lastName,
           email: this.email,
           phone: this.phone,
-          agencyId: this.agencyId,
           password: this.password,
         });
         this.$router.push("/");

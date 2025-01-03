@@ -12,8 +12,6 @@ export default {
         publisher: "",
         category: "",
         isbn: "",
-        lccn: "",
-        oclc: "",
       },
     };
   },
@@ -91,26 +89,8 @@ export default {
                   clearable
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                  v-model="bookData.lccn"
-                  label="LCCN"
-                  outlined
-                  dense
-                  clearable
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                  v-model="bookData.oclc"
-                  label="OCLC"
-                  outlined
-                  dense
-                  clearable
-              ></v-text-field>
-            </v-col>
           </v-row>
-          <v-btn color="primary" type="submit" class="mt-4" block>Submit</v-btn>
+          <v-btn color="primary" type="submit" class="mt-4 v-btn" block>Submit</v-btn>
         </v-form>
       </v-card>
     </v-container>
@@ -130,12 +110,6 @@ export default {
   font-weight: bold;
   color: #3f51b5;
   text-align: center;
-}
-
-.v-card {
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  background: #ffffff;
 }
 
 .v-btn {

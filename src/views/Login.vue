@@ -10,6 +10,8 @@
               v-model="email"
               required
               outlined
+              type="email"
+              :error-messages="emailError"
           ></v-text-field>
 
           <v-text-field
@@ -18,20 +20,22 @@
               type="password"
               required
               outlined
+              :error-messages="passwordError"
           ></v-text-field>
 
-          <v-btn color="primary" block type="submit" class="my-4">
+          <v-btn :loading="isLoading" color="primary" block type="submit" class="my-4">
             Login
           </v-btn>
         </v-form>
         <v-alert type="info" class="mt-3">
-          Don't have an account? <router-link to="/register">Register</router-link>.
+          Don't have an account?
+          <router-link to="/register">Register</router-link>
+          .
         </v-alert>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
-
 
 
 <script>
@@ -42,10 +46,16 @@ export default {
     return {
       email: "",
       password: "",
+      emailError: "",
+      passwordError: "",
+      isLoading: false,
     };
   },
   methods: {
     async login() {
+      this.isLoading = true;
+      this.emailError = "";
+      this.passwordError = "";
       try {
         const response = await axios.post("/auth/login", {
           email: this.email,
@@ -54,7 +64,18 @@ export default {
         localStorage.setItem("token", response.data.token);
         this.$router.push("/books");
       } catch (error) {
-        console.error("Login error:", error);
+        this.isLoading = false;
+        if (error.response) {
+          const {message} = error.response.data;
+          if (message === "User not found.") {
+            this.emailError = message;
+          } else if (message === "Invalid credentials.") {
+            this.passwordError = message;
+          }
+
+        } else {
+          console.error("Login error:", error.message);
+        }
       }
     },
   },
@@ -62,19 +83,6 @@ export default {
 </script>
 
 <style scoped>
-.v-card {
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-html,
-body,
-.v-application {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 .fill-height {
   display: flex;
   flex-direction: column;

@@ -62,7 +62,7 @@ export default {
           password: this.password,
         });
         localStorage.setItem("token", response.data.token);
-        const redirect = this.$route.query.redirect || "/profile";
+        const redirect = this.$route.query.redirect || "/books";
         this.$router.push(redirect);
 
       } catch (error) {

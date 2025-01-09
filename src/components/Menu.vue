@@ -2,15 +2,12 @@
   <v-app-bar app>
     <v-toolbar-title>Library Management App</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" @click="view" dark v-bind="attrs" v-on="on">Books</v-btn>
-        <v-btn color="primary" @click="checkIn" dark v-bind="attrs" v-on="on">Check-In</v-btn>
-        <v-btn color="primary" @click="checkOut" dark v-bind="attrs" v-on="on">Check-Out</v-btn>
-        <v-btn color="primary" @click="profile" dark v-bind="attrs" v-on="on">Profile</v-btn>
-        <v-btn color="primary" @click="logout" dark v-bind="attrs" v-on="on">Logout</v-btn>
-      </template>
-    </v-menu>
+    <v-btn color="primary" @click="seeBooks" dark>See Books</v-btn>
+    <v-btn color="primary" @click="addBooks" dark>Add Books</v-btn>
+    <v-btn color="primary" @click="checkIn" dark>Check-In</v-btn>
+    <v-btn color="primary" @click="checkOut" dark>Check-Out</v-btn>
+    <v-btn color="primary" @click="profile" dark>Profile</v-btn>
+    <v-btn color="primary" @click="logout" dark>Logout</v-btn>
   </v-app-bar>
 </template>
 
@@ -18,14 +15,12 @@
 export default {
   name: "MenuComponent",
   methods: {
-    navigateTo(route) {
-      this.$router.push(route);
-    },
     logout() {
+      localStorage.removeItem("token");
       console.log("User logged out");
       this.$router.push("/login");
     },
-    view() {
+    seeBooks() {
       this.$router.push("/list");
     },
     profile() {
@@ -36,6 +31,9 @@ export default {
     },
     checkOut() {
       this.$router.push("/checkOut");
+    },
+    addBooks() {
+      this.$router.push("/books");
     },
   },
 };

@@ -13,6 +13,7 @@
             outlined
             dense
             clearable
+            required
         ></v-text-field>
 
         <v-text-field
@@ -22,36 +23,43 @@
             outlined
             dense
             clearable
+            required
         ></v-text-field>
 
         <v-text-field
             v-model="email"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.email]"
             label="Email Address"
             outlined
             dense
             clearable
             type="email"
+            required
+            :error-messages="errors.email"
         ></v-text-field>
 
         <v-text-field
             v-model="phone"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.phone]"
             label="Phone Number"
             outlined
             dense
             clearable
             type="tel"
+            required
+            :error-messages="errors.phone"
         ></v-text-field>
 
         <v-text-field
             v-model="password"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.password]"
             label="Password"
             outlined
             dense
             clearable
             type="password"
+            required
+            :error-messages="errors.password"
         ></v-text-field>
 
         <v-btn color="primary" block @click="register">
@@ -80,14 +88,21 @@ export default {
       phone: "",
       password: "",
       errors: {
-        firstName: [],
-        lastName: [],
-        email: [],
-        phone: [],
-        password: [],
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
       },
       rules: {
         required: (value) => !!value || "This field is required.",
+        email: (value) =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Invalid email address.",
+        phone: (value) =>
+            /^\d{10}$/.test(value) || "Phone number must be 10 digits.",
+        password: (value) =>
+            value.length >= 8 ||
+            "Password must be at least 8 characters long.",
       },
     };
   },
@@ -107,9 +122,12 @@ export default {
           phone: this.phone,
           password: this.password,
         });
-        this.$router.push("/");
+        this.$router.push("/books");
       } catch (error) {
-        console.error("Registration error:", error.response?.data || error.message);
+        const err = error.response?.data?.errors || {};
+        this.errors.email = err.email || "";
+        this.errors.phone = err.phone || "";
+        this.errors.password = err.password || "";
       }
     },
   },

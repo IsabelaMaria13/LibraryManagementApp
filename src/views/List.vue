@@ -91,6 +91,7 @@ onMounted(fetchBooks);
         <thead>
         <tr>
           <th>Thumbnail</th>
+          <th>Google ID</th>
           <th>Title</th>
           <th>Authors</th>
           <th>Publisher</th>
@@ -109,6 +110,7 @@ onMounted(fetchBooks);
           <td>
             <img :src="book.thumbnail" alt="Book Thumbnail" width="50"/>
           </td>
+          <td>{{ book.id}}</td>
           <td>{{ book.title }}</td>
           <td>{{ book.authors }}</td>
           <td>{{ book.publisher }}</td>

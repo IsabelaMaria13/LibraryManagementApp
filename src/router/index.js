@@ -6,6 +6,8 @@ import Profile from "@/views/Profile.vue";
 import AddBooks from "@/views/AddBooks.vue";
 import List from "@/views/List.vue";
 import axios from "axios";
+import CheckOut from "@/views/CheckOut.vue";
+import CheckIn from "@/views/CheckIn.vue";
 
 
 const routes = [
@@ -15,6 +17,8 @@ const routes = [
     { path: "/profile", name: "Profile", component: Profile, meta: { requiresAuth: true } },
     { path: "/books", name: "Books", component: AddBooks, meta: { requiresAuth: true } },
     { path: "/list", name: "List", component: List, meta: { requiresAuth: true } },
+    { path: "/checkOut", name: "CheckOut", component: CheckOut, meta: { requiresAuth: true } },
+    { path: "/checkIn", name: "checkIn", component: CheckIn, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

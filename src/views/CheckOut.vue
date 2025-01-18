@@ -63,83 +63,79 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import {ref, computed, onMounted} from 'vue';
 import axios from 'axios';
 import MenuComponent from "@/components/Menu.vue";
 
-export default {
-  components: { MenuComponent },
-  data() {
-    return {
-      userOptions: [],
-      selectedUser: null,
-      googleBookId: '',
-      currentPage: 1,
-      itemsPerPage: 10,
-      errorMessage: "",
-      loading: false,
-    };
-  },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.userOptions.length / this.itemsPerPage);
-    },
-    paginatedUsers() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      return this.userOptions.slice(startIndex, startIndex + this.itemsPerPage);
-    },
-  },
-  methods: {
-    async fetchUsers() {
-      this.loading = true;
-      try {
-        const response = await axios.get('http://localhost:3000/api/users');
-        this.userOptions = response.data.map(user => ({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          city: user.address.city,
-          registeredAt: user.registeredAt,
-          dateOfBirth: user.dateOfBirth,
-        }));
-      } catch (error) {
-        this.errorMessage = error.response?.data || 'Failed to fetch users.';
-      } finally {
-        this.loading = false;
-      }
-    },
-    goToPage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
-    async checkoutBook() {
-      if (!this.selectedUser || !this.googleBookId) {
-        alert('Please select a user and enter a Google Book ID.');
-        return;
-      }
+const userOptions = ref([]);
+const selectedUser = ref(null);
+const googleBookId = ref('');
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+const errorMessage = ref("");
+const loading = ref(false);
 
-      const payload = {
-        userName: this.selectedUser.name,
-        googleBookId: this.googleBookId,
-      };
+const totalPages = computed(() => {
+  return Math.ceil(userOptions.value.length / itemsPerPage.value);
+});
 
-      try {
-        await axios.post('http://localhost:3000/checkout/checkout', payload);
-        alert('Book successfully checked out.');
-        this.selectedUser = null;
-        this.googleBookId = '';
-      } catch (error) {
-        console.error('Error during book checkout:', error.response.data.message);
-        alert(`Failed to check out the book: ${error.response.data.message}`);
-      }
-    },
-  },
-  mounted() {
-    this.fetchUsers();
-  },
+const paginatedUsers = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+  return userOptions.value.slice(startIndex, startIndex + itemsPerPage.value);
+});
+
+const fetchUsers = async () => {
+  loading.value = true;
+  try {
+    const response = await axios.get('http://localhost:3000/api/users');
+    userOptions.value = response.data.map(user => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      city: user.address.city,
+      registeredAt: user.registeredAt,
+      dateOfBirth: user.dateOfBirth,
+    }));
+  } catch (error) {
+    errorMessage.value = error.response?.data || 'Failed to fetch users.';
+  } finally {
+    loading.value = false;
+  }
 };
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+};
+
+const checkoutBook = async () => {
+  if (!selectedUser.value || !googleBookId.value) {
+    alert('Please select a user and enter a Google Book ID.');
+    return;
+  }
+
+  const payload = {
+    userName: selectedUser.value.name,
+    googleBookId: googleBookId.value,
+  };
+
+  try {
+    await axios.post('http://localhost:3000/checkout/checkout', payload);
+    alert('Book successfully checked out.');
+    selectedUser.value = null;
+    googleBookId.value = '';
+  } catch (error) {
+    console.error('Error during book checkout:', error.response?.data.message);
+    alert(`Failed to check out the book: ${error.response?.data.message}`);
+  }
+};
+
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 
 
@@ -199,6 +195,7 @@ export default {
 }
 
 .checkout-button {
+  margin-left: 15px;
   border: 1px solid #333333;
   padding: 5px 10px;
   border-radius: 50px;

@@ -1,6 +1,68 @@
+<template>
+  <MenuComponent/>
+  <div>
+    <div class="content-container">
+      <div v-if="loading">Loading...</div>
+      <div v-if="errorMessage">
+        <p style="color: red;">{{ errorMessage }}</p>
+      </div>
+      <table v-else class="books-table">
+        <thead>
+        <tr>
+          <th>Thumbnail</th>
+          <th>Google ID</th>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>Publisher</th>
+          <th>Published Date</th>
+          <th>Page Count</th>
+          <th>Categories</th>
+          <th>Language</th>
+          <th>Copies</th>
+          <th>Available</th>
+          <th>Date Added</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="book in paginatedBooks" :key="book.id">
+          <td>
+            <img :src="book.thumbnail" alt="Book Thumbnail" width="50"/>
+          </td>
+          <td>{{ book.id }}</td>
+          <td>{{ book.title }}</td>
+          <td>{{ book.authors }}</td>
+          <td>{{ book.publisher }}</td>
+          <td>{{ book.publishedDate }}</td>
+          <td>{{ book.pageCount }}</td>
+          <td>{{ book.categories }}</td>
+          <td>{{ book.language }}</td>
+          <td contenteditable="true" @input="updateField(book, 'numberOfCopies', $event)">{{ book.numberOfCopies }}</td>
+          <td contenteditable="true" @input="updateField(book, 'numberOfAvailable', $event)">{{book.numberOfAvailable}}
+          </td>
+          <td contenteditable="true" @input="updateField(book, 'dateAdded', $event)">{{ book.dateAdded }}</td>
+          <td>
+            <button @click="saveBook(book)">Save</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
+          Previous
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import axios from "axios";
-import { ref, onMounted, computed } from "vue";
+import {ref, onMounted, computed} from "vue";
 import MenuComponent from "@/components/Menu.vue";
 
 const books = ref([]);
@@ -78,80 +140,11 @@ const updateField = (book, field, event) => {
 onMounted(fetchBooks);
 </script>
 
-<template>
-  <div>
-    <MenuComponent/>
-    <div class="content-container">
-      <h1>Books List</h1>
-      <div v-if="loading">Loading...</div>
-      <div v-if="errorMessage">
-        <p style="color: red;">{{ errorMessage }}</p>
-      </div>
-      <table v-else class="books-table">
-        <thead>
-        <tr>
-          <th>Thumbnail</th>
-          <th>Google ID</th>
-          <th>Title</th>
-          <th>Authors</th>
-          <th>Publisher</th>
-          <th>Published Date</th>
-          <th>Page Count</th>
-          <th>Categories</th>
-          <th>Language</th>
-          <th>Copies</th>
-          <th>Available</th>
-          <th>Date Added</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="book in paginatedBooks" :key="book.id">
-          <td>
-            <img :src="book.thumbnail" alt="Book Thumbnail" width="50"/>
-          </td>
-          <td>{{ book.id}}</td>
-          <td>{{ book.title }}</td>
-          <td>{{ book.authors }}</td>
-          <td>{{ book.publisher }}</td>
-          <td>{{ book.publishedDate }}</td>
-          <td>{{ book.pageCount }}</td>
-          <td>{{ book.categories }}</td>
-          <td>{{ book.language }}</td>
-          <td contenteditable="true" @input="updateField(book, 'numberOfCopies', $event)">{{ book.numberOfCopies }}</td>
-          <td contenteditable="true" @input="updateField(book, 'numberOfAvailable', $event)">{{ book.numberOfAvailable }}</td>
-          <td contenteditable="true" @input="updateField(book, 'dateAdded', $event)">{{ book.dateAdded }}</td>
-          <td>
-            <button @click="saveBook(book)">Save</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <div class="pagination">
-        <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-          Previous
-        </button>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
-          Next
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
-.layout {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.menu-container {
-  margin-bottom: 30px;
-}
 
 .content-container {
+  margin-top: 40px;
   padding: 30px;
 }
 
@@ -159,12 +152,23 @@ onMounted(fetchBooks);
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
+  table-layout: fixed;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 500px;
 }
 
 .books-table th,
 .books-table td {
   border: 1px solid #ddd;
   padding: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font-size: 1rem;
+  color: #333;
+  transition: background-color 0.3s ease;
 }
 
 .books-table th {

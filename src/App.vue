@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-container class="app-background fill-height d-flex justify-center align-center">
+    <div class="app-background fill-height d-flex justify-center align-center">
       <router-view />
-    </v-container>
+    </div>
   </v-app>
 </template>
 

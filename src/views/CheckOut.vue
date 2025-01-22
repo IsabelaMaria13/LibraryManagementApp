@@ -171,7 +171,6 @@ onMounted(() => {
   cursor: not-allowed;
 }
 
-
 .users-table {
   width: 100%;
   border-collapse: collapse;
@@ -186,7 +185,6 @@ onMounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 .users-table th {
   background-color: #f4f4f4;

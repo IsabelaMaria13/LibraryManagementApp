@@ -1,64 +1,9 @@
-<script>
-import axios from "axios";
-import MenuComponent from "@/components/Menu.vue";
-import { ref } from "vue";
-
-export default {
-  components: { MenuComponent },
-  setup() {
-    const bookData = ref({
-      title: "",
-      author: "",
-      publisher: "",
-      category: "",
-      isbn: "",
-    });
-    const loading = ref(false);
-    const successMessage = ref("");
-
-    const submitBook = async () => {
-      loading.value = true;
-      successMessage.value = "";
-      try {
-        const response = await axios.post("http://localhost:3000/books/addBooks", {
-          bookData: bookData.value,
-        });
-        console.log(response.data.message);
-        successMessage.value =`The books added successfully.`;
-        bookData.value = {
-          title: "",
-          author: "",
-          publisher: "",
-          category: "",
-          isbn: "",
-        };
-        setTimeout(() => {
-          successMessage.value = "";
-        }, 3000);
-      } catch (error) {
-        console.error("Error adding book::", error);
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    return {
-      bookData,
-      loading,
-      successMessage,
-      submitBook,
-    };
-  },
-};
-</script>
-
 <template>
   <div class="add-book">
     <div>
       <MenuComponent />
     </div>
     <v-main>
-      <h1 class="title">Add Book</h1>
       <v-container class="form-container px-4 py-6 mx-auto fill-height d-flex align-center justify-center">
         <v-card class="pa-4 elevation-3">
           <v-form @submit.prevent="submitBook">
@@ -125,23 +70,54 @@ export default {
   </div>
 </template>
 
+<script setup>
+import axios from "axios";
+import MenuComponent from "@/components/Menu.vue";
+import { ref } from "vue";
+
+const bookData = ref({
+  title: "",
+  author: "",
+  publisher: "",
+  category: "",
+  isbn: "",
+});
+const loading = ref(false);
+const successMessage = ref("");
+
+const submitBook = async () => {
+  loading.value = true;
+  successMessage.value = "";
+  try {
+    const response = await axios.post("http://localhost:3000/books/addBooks", {
+      bookData: bookData.value,
+    });
+    console.log(response.data.message);
+    successMessage.value =`The books added successfully.`;
+    bookData.value = {
+      title: "",
+      author: "",
+      publisher: "",
+      category: "",
+      isbn: "",
+    };
+    setTimeout(() => {
+      successMessage.value = "";
+    }, 3000);
+  } catch (error) {
+    console.error("Error adding book:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+</script>
+
 <style scoped>
-.add-book {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #3f51b5;
-  text-align: center;
-}
-
 .v-btn {
   font-size: 1rem;
   font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.3s ease;
 }
-
 </style>
+

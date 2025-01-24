@@ -1,10 +1,9 @@
 <template>
   <MenuComponent/>
   <v-container>
-    <v-card class="mx-auto" max-width="500">
-      <v-card-title>
-        Profile
-      </v-card-title>
+
+    <v-card class="card-container">
+      <v-card-title>Profile</v-card-title>
       <v-card-text>
         <v-list-item>
           <v-list-item-content>
@@ -14,38 +13,40 @@
           </v-list-item-content>
         </v-list-item>
       </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" @click="fetchProfile">
-          Refresh
-        </v-btn>
-      </v-card-actions>
     </v-card>
 
-    <v-card class="mx-auto mt-5" max-width="500">
+    <v-card class="card-container mt-5">
       <v-card-title>Change Password</v-card-title>
-      <v-card-text>
+      <v-card-text class="form-spacing">
         <v-form>
           <v-text-field
+              class="input-field"
               label="Old Password"
               v-model="passwords.oldPassword"
               type="password"
               required
+              placeholder="Enter old password"
           ></v-text-field>
           <v-text-field
+              class="input-field"
               label="New Password"
               v-model="passwords.newPassword"
               :error-messages="passwordError"
               type="password"
               required
+              placeholder="Enter new password"
           ></v-text-field>
-          <v-btn :loading="loading" color="primary" @click="changePassword">
+          <v-btn :loading="loading" class="action-button" @click="changePassword">
             Change Password
           </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
+
   </v-container>
 </template>
+
+
 
 <script setup>
 import {onMounted, ref} from 'vue';
@@ -117,3 +118,22 @@ async function changePassword() {
 }
 
 </script>
+
+<style scoped>
+
+.action-button {
+  border: 1px solid #333333;
+  padding: 5px 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 0.6rem;
+}
+
+.action-button:hover {
+  background-color: #666666;
+  color: #ffffff;
+}
+
+
+</style>

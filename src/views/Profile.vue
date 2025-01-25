@@ -120,7 +120,6 @@ async function changePassword() {
 </script>
 
 <style scoped>
-
 .action-button {
   border: 1px solid #333333;
   padding: 5px 10px;
@@ -134,6 +133,4 @@ async function changePassword() {
   background-color: #666666;
   color: #ffffff;
 }
-
-
 </style>

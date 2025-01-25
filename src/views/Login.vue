@@ -37,50 +37,47 @@
   </v-container>
 </template>
 
+<script setup>
+import { ref } from 'vue';
+import axios from '../plugins/axios';
+import { useRouter, useRoute } from 'vue-router';
 
-<script>
-import axios from "../plugins/axios";
+const email = ref('');
+const password = ref('');
+const emailError = ref('');
+const passwordError = ref('');
+const isLoading = ref(false);
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-      emailError: "",
-      passwordError: "",
-      isLoading: false,
-    };
-  },
-  methods: {
-    async login() {
-      this.isLoading = true;
-      this.emailError = "";
-      this.passwordError = "";
-      try {
-        const response = await axios.post("/auth/login", {
-          email: this.email,
-          password: this.password,
-        });
-        localStorage.setItem("token", response.data.token);
-        const redirect = this.$route.query.redirect || "/books";
-        this.$router.push(redirect);
+const router = useRouter();
+const route = useRoute();
 
-      } catch (error) {
-        this.isLoading = false;
-        if (error.response) {
-          const {message} = error.response.data;
-          if (message === "User not found.") {
-            this.emailError = message;
-          } else if (message === "Invalid credentials.") {
-            this.passwordError = message;
-          }
+const login = async () => {
+  isLoading.value = true;
+  emailError.value = '';
+  passwordError.value = '';
 
-        } else {
-          console.error("Login error:", error.message);
-        }
+  try {
+    const response = await axios.post("/auth/login", {
+      email: email.value,
+      password: password.value,
+    });
+
+    localStorage.setItem("token", response.data.token);
+
+    await router.push(route.query.redirect ? route.query.redirect : '/books');
+  } catch (error) {
+    isLoading.value = false;
+    if (error.response) {
+      const { message } = error.response.data;
+      if (message === 'User not found.') {
+        emailError.value = message;
+      } else if (message === 'Invalid credentials.') {
+        passwordError.value = message;
       }
-    },
-  },
+    } else {
+      console.error('Login error:', error.message);
+    }
+  }
 };
 </script>
 

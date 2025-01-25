@@ -5,6 +5,7 @@
       <form @submit.prevent="checkoutBook">
         <label for="user"> Select User:  </label>
         <select v-model="selectedUser" required>
+          <option value="" disabled selected>Select User:</option>
           <option v-for="user in userOptions" :key="user.id" :value="user">
             {{ user.name }}
           </option>
@@ -140,6 +141,51 @@ onMounted(() => {
 
 
 <style scoped>
+@media (max-width: 1000px) {
+  form label {
+    display: none;
+  }
+
+  form input,
+  form select {
+    margin-bottom: 15px;
+    margin-left: 25px;
+  }
+
+  .users-table {
+    font-size: 0.8rem;
+    table-layout: auto;
+  }
+
+  .users-table th,
+  .users-table td {
+    display: none;
+  }
+
+  .users-table th:nth-child(1),
+  .users-table td:nth-child(1),
+  .users-table th:nth-child(2),
+  .users-table td:nth-child(2){
+    display: table-cell;
+  }
+
+  .pagination {
+    flex-direction: column;
+    margin-top: 15px;
+  }
+
+  .pagination button {
+    padding: 10px;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+
+  .pagination span {
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+}
+
 .content-container {
   margin: 20px auto;
   padding: 20px;
@@ -159,7 +205,6 @@ onMounted(() => {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
-  background: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -218,5 +263,8 @@ select:focus {
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }
 
+.pagination button {
+  background-color: #666666;
+}
 
 </style>

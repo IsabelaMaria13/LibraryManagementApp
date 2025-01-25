@@ -149,6 +149,51 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@media (max-width: 1000px) {
+  .filter-button {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .loans-table {
+    font-size: 0.8rem;
+    table-layout: auto;
+  }
+
+  .loans-table th,
+  .loans-table td {
+    display: none;
+  }
+  .loans-table th:nth-child(1),
+  .loans-table td:nth-child(1),
+  .loans-table th:nth-child(2),
+  .loans-table td:nth-child(2),
+  .loans-table th:nth-child(4),
+  .loans-table td:nth-child(4) {
+    display: table-cell;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination button {
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .checkin-button {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+}
+
 form {
   margin: 20px auto;
   padding: 20px;
@@ -215,7 +260,7 @@ button {
 .pagination button {
   margin: 0 5px;
   padding: 5px 10px;
-  background: #007bff;
+  background: #666666;
   color: white;
   border: none;
   border-radius: 4px;

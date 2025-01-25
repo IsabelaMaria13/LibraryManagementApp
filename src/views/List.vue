@@ -56,6 +56,7 @@
           <td contenteditable="true" @input="updateField(book, 'numberOfAvailable', $event)">{{ book.numberOfAvailable }}</td>
           <td contenteditable="true" @input="updateField(book, 'dateAdded', $event)">{{ book.dateAdded }}</td>
           <td><button @click="saveBook(book)">Save</button></td>
+          <td><button @click="deleteBook(book)">Delete</button></td>
         </tr>
         </tbody>
       </table>
@@ -132,6 +133,20 @@ const saveBook = async (book) => {
 
 const updateField = (book, field, event) => {
   book[field] = event.target.innerText.trim();
+};
+
+const deleteBook = async (book) => {
+  try {
+    await axios.delete(`http://localhost:3000/list/deleteBook/${book.id}`);
+    alert("Book deleted successfully!");
+    books.value = books.value.filter(b => b.id !== book.id);
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      alert(error.response.data.message);
+    } else {
+      alert("Failed to delete the book.");
+    }
+  }
 };
 
 const handleResize = () => {
@@ -233,5 +248,4 @@ onUnmounted(() => {
 .pagination span {
   font-size: 1rem;
 }
-
 </style>

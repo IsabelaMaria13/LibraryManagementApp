@@ -32,7 +32,8 @@
         </thead>
         <tbody>
         <tr v-for="loan in paginatedLoans" :key="loan.id">
-          <td><input type="checkbox" v-model="selectedLoans" :value="loan"></td>
+          <td><input type="checkbox" v-model="selectedLoans" :value="loan"
+                     :disabled="selectedLoans.length > 0 && !selectedLoans.includes(loan)"></td>
           <td>{{ loan.bookName }}</td>
           <td>{{ loan.bookId }}</td>
           <td>{{ loan.userName }}</td>
@@ -119,6 +120,10 @@ const checkInSelected = async () => {
     alert('Please select at least one loan to check in.');
     return;
   }
+  if (selectedLoans.value.length !== 1) {
+    alert('Please select just one loan to check in.');
+    return;
+  }
 
   try {
     const response = await axios.post('http://localhost:3000/checkIn/checkIn', {
@@ -129,6 +134,7 @@ const checkInSelected = async () => {
     });
 
     alert(response.data.message);
+    selectedLoans.value = [];
     await fetchLoans();
   } catch (error) {
     console.error('Error during book check-in:', error);

@@ -130,7 +130,7 @@ const checkoutBook = async () => {
     googleBookId.value = '';
   } catch (error) {
     console.error('Error during book checkout:', error.response?.data.message);
-    alert(`Failed to check out the book: ${error.response?.data.message}`);
+    alert(` ${error.response?.data.message}, please select another book to check-out`);
   }
 };
 
